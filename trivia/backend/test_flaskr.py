@@ -25,7 +25,7 @@ class TriviaTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-    
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -35,11 +35,12 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation and for expected errors.
     """
 
+
     def test_questions_size(self):
         response = self.client().get('/questions')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json["questions"]),10)
+        self.assertEqual(len(response.json["questions"]), 10)
 
     def test_wrong_method(self):
         response = self.client().get('/questions')
@@ -53,7 +54,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
-    
+
     def test_get_questions(self):
         response = self.client().get('/questions')
         data = json.loads(response.data)
@@ -63,7 +64,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertTrue(data['questions'])
         self.assertTrue(data['categories'])
-        self.assertTrue(len(data['questions']),10)
+        self.assertTrue(len(data['questions']), 10)
 
     def test_delete_question(self):
         response = self.client().delete('/questions/1')
@@ -75,16 +76,29 @@ class TriviaTestCase(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(data['success'], True)
 
+    def test_delete_question_fail(self):
+        response = self.client().delete('/questions')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(data['success'], False)
+
     def test_add_question(self):
-        response = self.client().post('/questions', data=json.dumps({}),
-                                 content_type='application/json')
+        response = self.client().post('/questions', data=json.dumps({
+            "answer": "Apollo 13",
+            "category": "5",
+            "difficulty": 4,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        }),
+            content_type='application/json')
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
 
     def test_search_question(self):
-        response = self.client().post('/questions', json={'searchTerm': 'what is your name'})
+        response = self.client().post(
+            '/questions', json={'searchTerm': 'what is your name'})
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
@@ -96,15 +110,22 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
-    
+
+    def test_get_questions_by_category_fail(self):
+        response = self.client().get('/categories/0/questions')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(data['success'], False)
+
     def test_play_quiz(self):
-        response = self.client().post('/quizzes',json={
-                                                    'previous_questions': [1, 2],
-                                                    'quiz_category': {
-                                                        'type': 'Science', 
-                                                        'id': '1'
-                                                        }
-                                                    })
+        response = self.client().post('/quizzes', json={
+            'previous_questions': [1, 2],
+            'quiz_category': {
+                'type': 'Science',
+                'id': '1'
+            }
+        })
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
@@ -114,6 +135,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertNotEqual(data['question']['id'], 1)
         self.assertNotEqual(data['question']['id'], 2)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

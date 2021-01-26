@@ -13,12 +13,10 @@ Code: 200
 Content: 
 ```json
 {
-    "categories":[
-        {
-            "id": 5,
-            "type": "Entertainment"
-        }
-    ],
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+    },
     "success": true
 }
 ```
@@ -165,23 +163,41 @@ Content:
 **URL** /quizzes   
 **Method** ['POST']
 
+*Request*
+```json
+{
+    "previous_questions": [5, 9],
+    "quiz_category": 
+    {
+        "type": "History", 
+        "id": "4"
+    }
+}
+```
+***OR***
+*in_Special_case_"ALL"*
+```json
+{
+    "previous_questions": [5, 9],
+    "quiz_category": 
+    {
+        "type": "All", 
+        "id": "0"
+    }
+}
+```
 *Success Response:*   
 Code: 200   
 Content: 
 ```json
 {
-    "quiz_category": {
-		"id":2,
-		"type":"Art"
-	},
-    "previous_questions": [
-    	{
-            "answer": "Escher",
-            "category": "2",
-            "difficulty": 1,
-            "id": 16,
-            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
-        }
-    ]
+    "question": {
+        "answer": "George Washington Carver",
+        "category": "4",
+        "difficulty": 2,
+        "id": 12,
+        "question": "Who invented Peanut Butter?"
+    },
+    "success": true
 }
 ```
