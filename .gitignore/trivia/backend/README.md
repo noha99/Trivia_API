@@ -99,4 +99,10 @@ dropdb trivia_test
 createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
+
+psql -U postgres 
+drop database test_trivia
+create database trivia_test
+psql -U postgres trivia_test < trivia.psql
+python test_flaskr.py
 ```

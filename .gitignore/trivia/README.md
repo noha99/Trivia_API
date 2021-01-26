@@ -24,9 +24,11 @@ Content:
 ```
 
 ## Show Paginating Questions
-**URL** /questions
+**URL** /questions?page=1
 
 **Method** ['GET']
+
+**Request Parameters** page= *Page number*
 
 *Success Response:*   
 Code: 200   
@@ -42,6 +44,10 @@ Content:
             "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
         },
     ],
+    "categories": {
+        "1": "Science",
+        "2": "Art"
+    },
     "success": true,
     "total": 19
 }

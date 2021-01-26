@@ -1,4 +1,4 @@
-import os
+import os , random 
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -120,19 +120,15 @@ def create_app(test_config=None):
         body = request.get_json()
         previous = body.get('previous_questions')
         category = body.get('quiz_category')
-
-        questions = Question.query.filter_by(category=category['id']).all()
-        questions = [i.format() for i in questions]
-
-        question = questions[random.randrange(0, len(questions)-1)]
         
-        for q in previous:
-            if (question.id in previous):
-                question = questions[random.randrange(0, len(questions), 1)]
-        
+        questions = Question.query.filter_by(category=category['id']).filter(Question.id.notin_((previous))).all()
+
+        new_question = questions[random.randrange(
+                0, len(questions))]
+
         return jsonify({
         'success': True,
-        'question':question.format()
+        'question':new_question.format()
         })
 
 
