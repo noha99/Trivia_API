@@ -1,6 +1,6 @@
 import os
 import random
-
+from os import environ
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -13,6 +13,7 @@ QUESTIONS_PER_PAGE = 10
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
+    app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
     setup_db(app)
 
     CORS(app, origins={'*'})
@@ -30,7 +31,7 @@ def create_app(test_config=None):
     @app.route('/')
     def hello():
         return jsonify({
-            'message': "Helllllllllllo",
+            'SECRET_KEY':app.config["SECRET_KEY"],
         })
 
     @app.route('/categories')

@@ -47,6 +47,7 @@ export FLASK_APP=flaskr
 export FLASK_ENV=development
 set FLASK_APP=flaskr
 set FLASK_ENV=development
+set SECRET_KEY=123
 flask run
 ```
 
